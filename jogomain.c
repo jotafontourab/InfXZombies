@@ -38,7 +38,9 @@ int main(void){
     UnloadImage(imagebotaoleaderboard);
     UnloadImage(imagebotaosair); // descarregando as imagens, pois ja foram carregadas como texturas.
     Rectangle playBounds = {+ 365, + 165, botaoplay.width * 0.2f, botaoplay.height * 0.2f }; // Definindo os limites do botao play
-
+    Rectangle leaderboardBounds = { + 365, + 310, botaoleaderboard.width * 0.2f, botaoleaderboard.height * 0.2f }; // Definindo os limites do botao leaderboard
+    Rectangle exitBounds = { + 365, + 455, botaosair.width * 0.2f, botaosair.height * 0.2f }; // Definindo os limites do botao sair
+    
     while (WindowShouldClose() == false) {
         
         // Update de telas
@@ -56,13 +58,38 @@ int main(void){
             else btnState = 1;
 
             if (IsMouseButtonReleased(MOUSE_BUTTON_LEFT)) btnAction = true;
-        }
-        else btnState = 0;
-        if (btnAction){
+            if (btnAction){
             // Change to JOGO screen
             currentScreen = JOGO;
         }
+        }
+       
+        if(CheckCollisionPointRec(mousePoint, leaderboardBounds))
+        {
+            if (IsMouseButtonDown(MOUSE_BUTTON_LEFT)) btnState = 2;
+            else btnState = 1;
+
+            if (IsMouseButtonReleased(MOUSE_BUTTON_LEFT)) btnAction = true;
+            if (btnAction){
+            // Change to JOGO screen
+            currentScreen = LEADERBOARD;
+        }
+    }
+        if(CheckCollisionPointRec(mousePoint, exitBounds))
+        {
+            if (IsMouseButtonDown(MOUSE_BUTTON_LEFT)) btnState = 2;
+            else btnState = 1;
+
+            if (IsMouseButtonReleased(MOUSE_BUTTON_LEFT)) btnAction = true;
+            if (btnAction){
+            // Change to JOGO screen
+            currentScreen = FECHAR;
+        }
+    }
+        else btnState = 0;
+        
             } break;
+
             case JOGO:
             {
                 // TODO: Update TITLE screen variables here!
@@ -90,7 +117,9 @@ int main(void){
         // Draw
         
         BeginDrawing();
+        
         ClearBackground(RAYWHITE);
+
          switch(currentScreen)
             {
                 case MENU:
@@ -106,7 +135,7 @@ int main(void){
                 {
                     // TODO: Draw TITLE screen here!
                     DrawRectangle(0, 0, screenWidth, screenHeight, GREEN);
-                    DrawText("TITLE SCREEN", 20, 20, 40, DARKGREEN);
+                    DrawText("JOGO TELA", 20, 20, 40, DARKGREEN);
                     DrawText("PRESS ENTER or TAP to JUMP to GAMEPLAY SCREEN", 120, 220, 20, DARKGREEN);
 
                 } break;
@@ -114,7 +143,7 @@ int main(void){
                 {
                     // TODO: Draw GAMEPLAY screen here!
                     DrawRectangle(0, 0, screenWidth, screenHeight, PURPLE);
-                    DrawText("GAMEPLAY SCREEN", 20, 20, 40, MAROON);
+                    DrawText("LEADERBOARD TELA", 20, 20, 40, MAROON);
                     DrawText("PRESS ENTER or TAP to JUMP to ENDING SCREEN", 130, 220, 20, MAROON);
 
                 } break;
