@@ -2,6 +2,8 @@
 #include "menu.h"
 #include <stdio.h>
 #include "fechar.h"
+#include "game.h"
+
 
 typedef enum GameScreen { MENU = 0, JOGO, LEADERBOARD, FECHAR } GameScreen;
 
@@ -24,6 +26,7 @@ typedef struct s_zumbi{
 int main(void){
     
     InitWindow(800, 600, "Hello Raylib");
+    SetExitKey(0);
     GameScreen currentScreen = MENU;// Definindo a tela atual como MENU
 
     int btnState = 0;               // Button state: 0-NORMAL, 1-MOUSE_HOVER, 2-PRESSED | verificar mouse (documentacao raylib)
@@ -47,25 +50,39 @@ int main(void){
     Image imagebotaosair = LoadImage("sprites/exit-button.png");
     Image imagegamebackground = LoadImage("sprites/background.png");
     Image imagebotaomenugenerico = LoadImage("sprites/menu-button.png");
-    
+    Image imagesol = LoadImage("sprites/sun.png");
+    Image imageterra = LoadImage("sprites/dirt.png");
+    Image imagegrama = LoadImage("sprites/grass.png");
+    Image imagegirassol = LoadImage("sprites/sunflower.png");
+    Image imageervilha = LoadImage("sprites/pea-shooter.png");
+    Image imagezumbi = LoadImage("sprites/zombie.png");
     ImageResize(&imagebackground, 800, 600);
     ImageResize(&imagegamebackground, 800, 600);
+    ImageResize(&imagegrama, 72, 96); 
+    ImageResize(&imageterra, 72, 96);
+    ImageResize(&imagesol, 70, 70); 
+    ImageResize(&imagegirassol, 150, 90);
+    ImageResize(&imageervilha, 150, 90);
 
-    Texture2D background = LoadTextureFromImage(imagebackground); // carregando a imagem do background como textura.
-    Texture2D botaoplay = LoadTextureFromImage(imagebotaoplay); // carregando a imagem do botao play como textura.
-    Texture2D botaoleaderboard = LoadTextureFromImage(imagebotaoleaderboard); // carregando a imagem do botao leaderboard como textura.
-    Texture2D botaosair = LoadTextureFromImage(imagebotaosair); // carregando a imagem do botao sair como textura.
+    //aqui eu carrego as texturas a partir das imagens que eu carreguei previamente
+
+    Texture2D background = LoadTextureFromImage(imagebackground); 
+    Texture2D botaoplay = LoadTextureFromImage(imagebotaoplay); 
+    Texture2D botaoleaderboard = LoadTextureFromImage(imagebotaoleaderboard); 
+    Texture2D botaosair = LoadTextureFromImage(imagebotaosair); 
     Texture2D gamebackground = LoadTextureFromImage(imagegamebackground);
-    Texture2D botaomenugenerico = LoadTextureFromImage(imagebotaomenugenerico); // carregando a imagem do botao menu generico como textura.
+    Texture2D botaomenugenerico = LoadTextureFromImage(imagebotaomenugenerico); 
+    Texture2D terra = LoadTextureFromImage(imageterra); 
+    Texture2D grama = LoadTextureFromImage(imagegrama); 
+    Texture2D girassol = LoadTextureFromImage(imagegirassol); 
+    Texture2D ervilha = LoadTextureFromImage(imageervilha); 
+    Texture2D sol = LoadTextureFromImage(imagesol);
+    Texture2D zumbi = LoadTextureFromImage(imagezumbi); 
 
     float x = (screenWidth - background.width -110) / 2.0f;
     float y = (screenHeight - background.height) / 2.0f;  // apliquei a centralizacao do background
-  //  UnloadImage(imagebackground); 
-  //  UnloadImage(imagebotaoplay); 
-   // UnloadImage(imagebotaoleaderboard);
-   // UnloadImage(imagebotaosair); 
-  //  UnloadImage(imagegamebackground); 
-   // UnloadImage(imagebotaomenugenerico);    // descarregando as imagens, pois ja foram carregadas como texturas.
+ 
+
     Rectangle playBounds = {+ 365, + 165, botaoplay.width * 0.2f, botaoplay.height * 0.2f }; // definindo os limites do botao play
     Rectangle leaderboardBounds = { + 365, + 310, botaoleaderboard.width * 0.2f, botaoleaderboard.height * 0.2f }; // definindo os limites do botao leaderboard
     Rectangle exitBounds = { + 365, + 455, botaosair.width * 0.2f, botaosair.height * 0.2f }; // definindo os limites do botao sair
@@ -124,7 +141,10 @@ int main(void){
         case JOGO:
         {
                 // TODO: Update TITLE screen variables here!
-
+     //   if (IsKeyPressed(KEY_ESCAPE)) { //se apertar esc, volta neste caso (ao contrario do menu), ele nao volta direto pro menu,
+            //mas sim para uma tela de "pause", que da opcao de voltar para o menu ou sair do jogo
+            
+//}
                 // Press enter to change to GAMEPLAY screen
            
         } break;
@@ -142,6 +162,11 @@ int main(void){
             framesCounter++;
             mousePoint = GetMousePosition();
             btnAction = false;
+
+            if (IsKeyPressed(KEY_ESCAPE)) { //se apertar esc, volta para o menu
+            
+            currentScreen = MENU;
+}
 
             if(CheckCollisionPointRec(mousePoint, saidaSimBounds))
             {
@@ -193,7 +218,7 @@ int main(void){
                 case JOGO:
                 {
                     
-                   DrawTextureEx(gamebackground, (Vector2){ x, y }, 0.0f, escalabackground, WHITE);
+                  desenhaGame(gamebackground, x, y, escalabackground, grama, terra, girassol, ervilha, sol); //funcao que vem do game.c
 
                 } break;
                 case LEADERBOARD:
@@ -209,6 +234,8 @@ int main(void){
                    desenhaSair(background, botaomenugenerico, x, y, escalabackground);
 
                 } break;
+
+                
                 default: break;
             }
 
