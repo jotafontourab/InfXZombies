@@ -10,8 +10,8 @@ typedef struct {
 } Sol;
 
 void InitSois(void);
-void UpdateSois(void);
-void DrawSois(void);
-int GetSoisColetados(void);
+void AtualizaSois(void);
+void DesenhaSois(void);
+int SoisColetados(void);
 
 #endif

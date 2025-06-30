@@ -9,14 +9,14 @@ static float tempoSois = 0.0f;
 static int contadorSois = 0;
 
 void InitSois(void) {
-    spriteSol = LoadTexture("sol.png");
+    spriteSol = LoadTexture("sun.png");
     for (int i = 0; i < MAX_SOIS; i++) sois[i].ativo = false;
 }
 
 static void gerarSol(void) {
     for (int i = 0; i < MAX_SOIS; i++) {
         if (sois[i].ativo != true) {
-            sois[i].posicao = (Vector2){ GetRandomValue(100, 600), GetRandomValue(100, 400) };
+            sois[i].posicao = (Vector2){ GetRandomValue(90, 600), GetRandomValue(110, 400) };
             sois[i].tempoVida = 6.0f;
             sois[i].ativo = true;
             break;
@@ -24,7 +24,7 @@ static void gerarSol(void) {
     }
 }
 
-void UpdateSois(void) {
+void AtualizaSois(void) {
     tempoSois += GetFrameTime();
     if (tempoSois >= INTERVALO_SOL) {
         gerarSol();
@@ -53,6 +53,6 @@ void DrawSois(void) {
     }
 }
 
-int GetSoisColetados(void) {
+int SoisColetados(void) {
     return contadorSois;
 }

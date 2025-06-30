@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include "fechar.h"
 #include "game.h"
+#include "sois.h"
 
 
 typedef enum GameScreen { MENU = 0, JOGO, LEADERBOARD, FECHAR } GameScreen;
@@ -81,6 +82,7 @@ int main(void){
     Texture2D sol = LoadTextureFromImage(imagesol);
     Texture2D zumbi = LoadTextureFromImage(imagezumbi); 
     Texture2D botaoinv = LoadTextureFromImage(imagebotaoinv);
+    Texture2D botaoinv2 = LoadTextureFromImage(imagebotaoinv); // botao de inventario
 
     float x = (screenWidth - background.width -110) / 2.0f;
     float y = (screenHeight - background.height) / 2.0f;  // apliquei a centralizacao do background
@@ -91,7 +93,8 @@ int main(void){
     Rectangle exitBounds = { + 365, + 455, botaosair.width * 0.2f, botaosair.height * 0.2f }; // definindo os limites do botao sair
     Rectangle saidaSimBounds = { + 280, + 320, botaomenugenerico.width * 0.1f, botaomenugenerico.height * 0.3f }; // definindo os limites do botao sair sim
     Rectangle saidaNaoBounds = { + 400, + 320, botaomenugenerico.width * 0.1f, botaomenugenerico.height * 0.3f }; // definindo os limites do botao sair nao
-   // definindo os limites do botao inv
+
+    // definindo os limites do botao inv
     while (WindowShouldClose() == false) {
         
         // Update de telas
@@ -154,9 +157,8 @@ int main(void){
         
         case LEADERBOARD:
         {
-                // TODO: Update GAMEPLAY screen variables here!
-
-                // Press enter to change to ENDING screen
+            if (IsKeyPressed(KEY_ESCAPE)) { //se apertar esc, volta para o menu
+            currentScreen = MENU;}
                
         } break;
             
@@ -221,8 +223,8 @@ int main(void){
                 case JOGO:
                 {
                     
-                  desenhaGame(gamebackground, x, y, escalabackground, grama, terra, girassol, ervilha, sol, botaoinv); //funcao que vem do game.c
-
+                  desenhaGame(gamebackground, x, y, escalabackground, grama, terra, girassol, ervilha, sol, botaoinv, botaoinv2); //funcao que vem do game.c
+                  
                 } break;
                 case LEADERBOARD:
                 {
