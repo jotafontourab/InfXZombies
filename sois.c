@@ -1,4 +1,5 @@
 #include "sois.h"
+#include "raylib.h"
 
 #define MAX_SOIS 10
 #define INTERVALO_SOL 4.0f
@@ -7,9 +8,13 @@ static Sol sois[MAX_SOIS];
 static Texture2D spriteSol;
 static float tempoSois = 0.0f;
 static int contadorSois = 0;
+static Image imagesol;
 
 void InitSois(void) {
-    spriteSol = LoadTexture("sun.png");
+    imagesol = LoadImage("sprites/sun.png");
+    spriteSol = LoadTextureFromImage(imagesol);
+    spriteSol.width = 25; // Definindo a largura da textura do sol
+    spriteSol.height = 25; // Definindo a altura da textura do sol
     for (int i = 0; i < MAX_SOIS; i++) sois[i].ativo = false;
 }
 
@@ -31,16 +36,19 @@ void AtualizaSois(void) {
         tempoSois = 0.0f;
     }
 
-    Vector2 mouse = GetMousePosition();
+
     for (int i = 0; i < MAX_SOIS; i++) {
         if (!sois[i].ativo) continue;
 
-        Rectangle area = { sois[i].posicao.x, sois[i].posicao.y, spriteSol.width, spriteSol.height };
 
-        if (CheckCollisionPointRec(mouse, area) && IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
+        if (IsKeyPressed(KEY_S)) {
+            for (int i = 0; i < MAX_SOIS; i++) {
+            if (sois[i].ativo) {
             sois[i].ativo = false;
-            contadorSois++;
+            contadorSois+=25;
         }
+    }
+}
 
         sois[i].tempoVida -= GetFrameTime();
         if (sois[i].tempoVida <= 0.0f) sois[i].ativo = false;
@@ -55,4 +63,9 @@ void DrawSois(void) {
 
 int SoisColetados(void) {
     return contadorSois;
+}
+
+void SubtraiSois(int valor) {
+    contadorSois -= valor;
+    if (contadorSois < 0) contadorSois = 0;
 }

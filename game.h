@@ -1,10 +1,12 @@
 #ifndef GAME_H
 #define GAME_H
+#define LINHAS 5
+#define COLUNAS 9
 
-// Inclua raylib aqui para que a função possa usar os tipos do raylib
+
 #include "raylib.h"
 
-// Protótipo da função
+
 void desenhaGame(Texture2D gamebackground,
                  float x,
                  float y,
@@ -16,5 +18,9 @@ void desenhaGame(Texture2D gamebackground,
                  Texture2D sol,
                  Texture2D botaoinv,
                  Texture2D botaoinv2);
+                 
+extern int tabuleiro[LINHAS][COLUNAS]; // tive q declara-lo globalmente e externamente, para que a funcao possa acessar o tabuleiro e para que ele nao atualize
+// dentro do loop. precisei de uma ajudinha para descobrir isso kkkkkkkk
 
-#endif // GAME_H
+
+#endif

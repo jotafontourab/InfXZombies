@@ -11,7 +11,8 @@ typedef struct {
 
 void InitSois(void);
 void AtualizaSois(void);
-void DesenhaSois(void);
+void DrawSois(void);
 int SoisColetados(void);
+void SubtraiSois(int valor);
 
 #endif

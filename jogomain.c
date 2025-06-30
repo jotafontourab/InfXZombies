@@ -8,21 +8,6 @@
 
 typedef enum GameScreen { MENU = 0, JOGO, LEADERBOARD, FECHAR } GameScreen;
 
-typedef struct s_planta{
-    char tipo; // G - Girassois | E - Ervilhas 
-    int localizax;
-    int localizay; 
-    int preco; // em sois
-    int dano;
-}PLANTA;
-
-typedef struct s_zumbi{
-    int localizax;
-    int localizay;
-    int velocidadex;
-    int vida;
-}ZUMBI;
-
 
 int main(void){
     
@@ -55,7 +40,7 @@ int main(void){
     Image imageterra = LoadImage("sprites/dirt.png");
     Image imagegrama = LoadImage("sprites/grass.png");
     Image imagegirassol = LoadImage("sprites/sunflower.png");
-    Image imageervilha = LoadImage("sprites/pea-shooter.png");
+    Image imageervilha = LoadImage("sprites/peashooter.png");
     Image imagezumbi = LoadImage("sprites/zombie.png");
     Image imagebotaoinv = LoadImage("sprites/button.png");
     ImageResize(&imagebackground, 800, 600);
@@ -66,7 +51,7 @@ int main(void){
     ImageResize(&imagegirassol, 120, 90);
     ImageResize(&imageervilha, 120, 90);
     ImageResize(&imagebotaoinv, 80, 100);
-
+    InitSois();
     //aqui eu carrego as texturas a partir das imagens que eu carreguei previamente
 
     Texture2D background = LoadTextureFromImage(imagebackground); 
@@ -96,7 +81,7 @@ int main(void){
 
     // definindo os limites do botao inv
     while (WindowShouldClose() == false) {
-        
+        AtualizaSois();
         // Update de telas
         switch (currentScreen)
         {
@@ -224,7 +209,7 @@ int main(void){
                 {
                     
                   desenhaGame(gamebackground, x, y, escalabackground, grama, terra, girassol, ervilha, sol, botaoinv, botaoinv2); //funcao que vem do game.c
-                  
+             
                 } break;
                 case LEADERBOARD:
                 {
