@@ -5,6 +5,15 @@
 #include "game.h"
 #include "sois.h"
 
+typedef struct {
+
+char nomejogador[25]; // nome do jogador
+int pontuacao; // pontuacao do jogador
+
+}JOGADOR;
+
+
+
 
 typedef enum GameScreen { MENU = 0, JOGO, LEADERBOARD, FECHAR } GameScreen;
 
@@ -13,6 +22,40 @@ int main(void){
     
     InitWindow(800, 600, "Hello Raylib");
     SetExitKey(0);
+
+
+    int horda[3];
+    int contador;
+    FILE *hordatxt;
+    FILE *leaderboardbin;
+    JOGADOR jogadores[5];
+     if(!(hordatxt = fopen("config.txt", "r"))){
+        printf("Erro ao abrir o arquivo horda.txt para leitura\n");
+     }
+     else{
+        while(!feof(hordatxt)){
+            fscanf(hordatxt, "%d %d %d", &horda[0], &horda[1], &horda[2]); 
+        }
+        fclose(hordatxt);
+     }
+     if(!(leaderboardbin = fopen("top_scores.bin", "ab+"))){
+        printf("Erro ao abrir o arquivo leaderboard.bin para leitura\n");
+        }else{
+            for(contador = 0; contador < 5; contador++){
+                if(fread(&jogadores[contador], sizeof(JOGADOR), 5 , leaderboardbin)== 5){
+                    printf("leitura biniaria OK!\n");
+                }
+            }
+            fclose(leaderboardbin);
+        }
+
+     
+     
+     // abrir o arquivo txt que le o numero de zumbis por horda
+    // abrir o arquivo txt que le o numero de zumbis por horda
+
+    //abrir o arquivo 
+
     GameScreen currentScreen = MENU;// Definindo a tela atual como MENU
 
     int btnState = 0;               // Button state: 0-NORMAL, 1-MOUSE_HOVER, 2-PRESSED | verificar mouse (documentacao raylib)
@@ -43,14 +86,16 @@ int main(void){
     Image imageervilha = LoadImage("sprites/peashooter.png");
     Image imagezumbi = LoadImage("sprites/zombie.png");
     Image imagebotaoinv = LoadImage("sprites/button.png");
+    Image imageleaderboard = LoadImage("sprites/leaderboard.png");
     ImageResize(&imagebackground, 800, 600);
     ImageResize(&imagegamebackground, 800, 600);
     ImageResize(&imagegrama, 72, 96); 
     ImageResize(&imageterra, 72, 96);
     ImageResize(&imagesol, 70, 70); 
-    ImageResize(&imagegirassol, 120, 90);
-    ImageResize(&imageervilha, 120, 90);
+    ImageResize(&imagegirassol, 120, 150);
+    ImageResize(&imageervilha, 120, 150);
     ImageResize(&imagebotaoinv, 80, 100);
+    ImageResize(&imageleaderboard, 550, 670);
     InitSois();
     //aqui eu carrego as texturas a partir das imagens que eu carreguei previamente
 
@@ -68,13 +113,14 @@ int main(void){
     Texture2D zumbi = LoadTextureFromImage(imagezumbi); 
     Texture2D botaoinv = LoadTextureFromImage(imagebotaoinv);
     Texture2D botaoinv2 = LoadTextureFromImage(imagebotaoinv); // botao de inventario
+    Texture2D leaderboard = LoadTextureFromImage(imageleaderboard); // botao de leaderboard
 
     float x = (screenWidth - background.width -110) / 2.0f;
     float y = (screenHeight - background.height) / 2.0f;  // apliquei a centralizacao do background
  
 
     Rectangle playBounds = {+ 365, + 165, botaoplay.width * 0.2f, botaoplay.height * 0.2f }; // definindo os limites do botao play
-    Rectangle leaderboardBounds = { + 365, + 310, botaoleaderboard.width * 0.2f, botaoleaderboard.height * 0.2f }; // definindo os limites do botao leaderboard
+    Rectangle leaderboardBounds = { + 365, + 280, botaoleaderboard.width * 0.2f, botaoleaderboard.height * 0.2f }; // definindo os limites do botao leaderboard
     Rectangle exitBounds = { + 365, + 455, botaosair.width * 0.2f, botaosair.height * 0.2f }; // definindo os limites do botao sair
     Rectangle saidaSimBounds = { + 280, + 320, botaomenugenerico.width * 0.1f, botaomenugenerico.height * 0.3f }; // definindo os limites do botao sair sim
     Rectangle saidaNaoBounds = { + 400, + 320, botaomenugenerico.width * 0.1f, botaomenugenerico.height * 0.3f }; // definindo os limites do botao sair nao
@@ -131,13 +177,7 @@ int main(void){
 
         case JOGO:
         {
-                // TODO: Update TITLE screen variables here!
-     //   if (IsKeyPressed(KEY_ESCAPE)) { //se apertar esc, volta neste caso (ao contrario do menu), ele nao volta direto pro menu,
-            //mas sim para uma tela de "pause", que da opcao de voltar para o menu ou sair do jogo
-            
-//}
-                // Press enter to change to GAMEPLAY screen
-           
+
         } break;
         
         case LEADERBOARD:
@@ -213,10 +253,19 @@ int main(void){
                 } break;
                 case LEADERBOARD:
                 {
-                    // TODO: Draw GAMEPLAY screen here!
-                    DrawRectangle(0, 0, screenWidth, screenHeight, PURPLE);
-                    DrawText("LEADERBOARD TELA", 20, 20, 40, MAROON);
-                    DrawText("PRESS ENTER or TAP to JUMP to ENDING SCREEN", 130, 220, 20, MAROON);
+                    DrawTextureEx(gamebackground, (Vector2){ x, y }, 0.0f, escalabackground, WHITE);
+                    DrawTextureEx(leaderboard, (Vector2){ 120, -20 }, 0.0f, 1.0f, WHITE);
+                    DrawText(TextFormat("%s", jogadores[0].nomejogador), 350, 250, 30, BLACK);
+                    DrawText(TextFormat("%d", jogadores[0].pontuacao), 280, 250, 30, BLACK);
+                    DrawText(TextFormat("%s", jogadores[1].nomejogador), 350, 290, 30, BLACK);
+                    DrawText(TextFormat("%d", jogadores[1].pontuacao), 280, 290, 30, BLACK);
+                    DrawText(TextFormat("%s", jogadores[2].nomejogador), 350, 330, 30, BLACK);
+                    DrawText(TextFormat("%d", jogadores[2].pontuacao), 280, 330, 30, BLACK);
+                    DrawText(TextFormat("%s", jogadores[3].nomejogador), 350, 370, 30, BLACK);
+                    DrawText(TextFormat("%d", jogadores[3].pontuacao), 280, 370, 30, BLACK);
+                    DrawText(TextFormat("%s", jogadores[4].nomejogador), 350, 410, 30, BLACK);
+                    DrawText(TextFormat("%d", jogadores[4].pontuacao), 280, 410, 30, BLACK);
+
 
                 } break;
                 case FECHAR:
