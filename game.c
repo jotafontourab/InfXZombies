@@ -12,7 +12,10 @@ void desenhaGame(Texture2D gamebackground,
                  Texture2D terra,
                  Texture2D girassol,
                  Texture2D ervilha,
-                 Texture2D sol) {
+                 Texture2D sol,
+                 Texture2D botaoinv) {
+
+  
            
             DrawTextureEx(gamebackground, (Vector2){ x, y }, 0.0f, escalabackground, WHITE);
             DrawTextureEx(gamebackground, (Vector2){ x, y }, 0.0f, escalabackground, WHITE);
@@ -28,8 +31,11 @@ void desenhaGame(Texture2D gamebackground,
                         }   
     }
 }          
-           DrawTextureEx(sol, (Vector2){ 50, 30 }, 0.0f, 1.2f, WHITE);
-           DrawTextureEx(girassol, (Vector2){ 150, 20 }, 0.0f, 1.0f, WHITE);
+          DrawTexture(botaoinv, 170, 14, WHITE); // Desenha o botão de inventário na posição (150, 20) 
+          DrawTextureEx(sol, (Vector2){ 50, 22 }, 0.0f, 1.2f, WHITE);
+          DrawTextureEx(girassol, (Vector2){ 160, 12 }, 0.0f, 0.85f, WHITE);
+          Rectangle botaoinvBounds = { +150 , + 20, botaoinv.width * 0.2f, botaoinv.height * 0.2f }; 
+          DrawText(TextFormat("%d", sois), 83, 50, 30, BLACK);
                  }
 
 //if (IsKeyPressed(KEY_ESCAPE)) { //se apertar esc, volta para o menu

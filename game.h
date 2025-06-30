@@ -13,6 +13,7 @@ void desenhaGame(Texture2D gamebackground,
                  Texture2D terra,
                  Texture2D girassol,
                  Texture2D ervilha,
-                Texture2D sol);
+                 Texture2D sol,
+                 Texture2D botaoinv);
 
 #endif // GAME_H

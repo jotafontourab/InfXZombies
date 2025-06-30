@@ -56,13 +56,15 @@ int main(void){
     Image imagegirassol = LoadImage("sprites/sunflower.png");
     Image imageervilha = LoadImage("sprites/pea-shooter.png");
     Image imagezumbi = LoadImage("sprites/zombie.png");
+    Image imagebotaoinv = LoadImage("sprites/button.png");
     ImageResize(&imagebackground, 800, 600);
     ImageResize(&imagegamebackground, 800, 600);
     ImageResize(&imagegrama, 72, 96); 
     ImageResize(&imageterra, 72, 96);
     ImageResize(&imagesol, 70, 70); 
-    ImageResize(&imagegirassol, 150, 90);
-    ImageResize(&imageervilha, 150, 90);
+    ImageResize(&imagegirassol, 120, 90);
+    ImageResize(&imageervilha, 120, 90);
+    ImageResize(&imagebotaoinv, 80, 100);
 
     //aqui eu carrego as texturas a partir das imagens que eu carreguei previamente
 
@@ -78,6 +80,7 @@ int main(void){
     Texture2D ervilha = LoadTextureFromImage(imageervilha); 
     Texture2D sol = LoadTextureFromImage(imagesol);
     Texture2D zumbi = LoadTextureFromImage(imagezumbi); 
+    Texture2D botaoinv = LoadTextureFromImage(imagebotaoinv);
 
     float x = (screenWidth - background.width -110) / 2.0f;
     float y = (screenHeight - background.height) / 2.0f;  // apliquei a centralizacao do background
@@ -88,7 +91,7 @@ int main(void){
     Rectangle exitBounds = { + 365, + 455, botaosair.width * 0.2f, botaosair.height * 0.2f }; // definindo os limites do botao sair
     Rectangle saidaSimBounds = { + 280, + 320, botaomenugenerico.width * 0.1f, botaomenugenerico.height * 0.3f }; // definindo os limites do botao sair sim
     Rectangle saidaNaoBounds = { + 400, + 320, botaomenugenerico.width * 0.1f, botaomenugenerico.height * 0.3f }; // definindo os limites do botao sair nao
-    
+   // definindo os limites do botao inv
     while (WindowShouldClose() == false) {
         
         // Update de telas
@@ -218,7 +221,7 @@ int main(void){
                 case JOGO:
                 {
                     
-                  desenhaGame(gamebackground, x, y, escalabackground, grama, terra, girassol, ervilha, sol); //funcao que vem do game.c
+                  desenhaGame(gamebackground, x, y, escalabackground, grama, terra, girassol, ervilha, sol, botaoinv); //funcao que vem do game.c
 
                 } break;
                 case LEADERBOARD:
