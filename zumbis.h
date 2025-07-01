@@ -12,6 +12,7 @@ typedef struct {
     bool ativo;
 } ZUMBI;
 
+extern ZUMBI zumbis[NUM_MAXDEZUMBIS];
 
 void InitZumbis(void);
 

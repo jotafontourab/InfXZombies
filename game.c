@@ -2,6 +2,7 @@
 #include "game.h"
 #include "sois.h"
 #include "zumbis.h"
+#include "plantas.h"
 #include <stdbool.h> 
 #define MARGEM_X 35
 #define MARGEM_Y 95
@@ -9,6 +10,12 @@
 #define COLUNAS 9
 #define LARGURA_QUADRADINHO 72
 #define ALTURA_QUADRADINHO 96
+#define INTERVALO_DISPARO_ERVILHA 10.0f 
+#define INTERVALO_DISPARO_GIRASSOL 13.0f 
+#define DANO_ERVILHA 20
+#define DANO_GIRASSOL 10
+#define VELOCIDADE_PROJETIL 15.0f
+
 
 
 typedef enum {
@@ -17,13 +24,8 @@ typedef enum {
     SELECIONANDO_GIRASSOL
 } PlantaSelecionada;
 
-typedef struct s_planta{
-    char tipo; // G - Girassois | E - Ervilhas 
-    int localizax;
-    int localizay; 
-    int preco; // em sois
-    int dano;
-}PLANTA;
+
+static float tempoDesdeUltimoDisparo[LINHAS][COLUNAS] = {0};
 
 int permissaohordacontinua = 1; 
 
@@ -47,12 +49,13 @@ void desenhaGame(Texture2D gamebackground,
                  Texture2D botaoinv2,
                  Texture2D zumbi,
                  int horda[],
-                 Texture2D botaomenugenerico) {
+                 Texture2D botaomenugenerico,
+                 Texture2D projetil) {
 
 int botaoclicado = 0; // variável para controlar o botão clicado, para que a confirmação de clique não fique ativa, para conseguir colocar as plantas no tabuleiro
 int soiscont = 0;
 
-
+AtualizarProjeteis(delta, zumbi);
 
 Vector2 mouse = { 0.0f, 0.0f }; 
 mouse = GetMousePosition();
@@ -126,15 +129,50 @@ if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
         else if (tabuleiro[i][j] == 2)
             DrawTexture(girassol, x+15, y-15, WHITE);
     }
+
+    for (int i = 0; i < LINHAS; i++) {
+        for (int j = 0; j < COLUNAS; j++) {
+            float x = (MARGEM_X -30) + j * grama.width;
+            float y = MARGEM_Y + i * grama.height;
+            
+            if (tabuleiro[i][j] == 1 || tabuleiro[i][j] == 2) { // Ervilha ou Girassol
+                // Atualiza temporizador
+                tempoDesdeUltimoDisparo[i][j] += delta;
+                
+                // Verifica se pode atirar
+                float intervalo = (tabuleiro[i][j] == 1) ? INTERVALO_DISPARO_ERVILHA : INTERVALO_DISPARO_GIRASSOL;
+                int dano = (tabuleiro[i][j] == 1) ? DANO_ERVILHA : DANO_GIRASSOL;
+                
+                if (tempoDesdeUltimoDisparo[i][j] >= intervalo) {
+                    // Verifica se há zumbis à frente
+                    bool temZumbi = false;
+                    for (int z = 0; z < NUM_MAXDEZUMBIS; z++) {
+                        if (zumbis[z].ativo && zumbis[z].pos.x > x) {
+                            temZumbi = true;
+                            break;
+                        }
+                    }
+                    
+                    // Dispara se houver zumbi
+                    if (temZumbi) {
+                        CriarProjetil((Vector2){x + 50, y + 20}, i, dano, VELOCIDADE_PROJETIL);
+                        tempoDesdeUltimoDisparo[i][j] = 0.0f; // Reseta o temporizador
+                    }
+                }
+            }
+        }
+    }
 }
 if(permissaohordacontinua ==1){
 AtualizaZumbis(delta, grama, horda, botaomenugenerico, &permissaohordacontinua); // Atualiza os zumbis, passando o delta e a textura da grama
 DesenhaZumbis(zumbi);
+DesenharProjeteis(projetil);
 }
 
 if (permissaohordacontinua == 0) {
     DrawRectangle(0, 0, GetScreenWidth(), GetScreenHeight(), Fade(BLACK, 0.5f));
     DrawText("GAME OVER", 250, 280, 50, RED);
-    DrawText("Aperte ESC para voltar ao menu", 160, 340, 20, WHITE);
+    DrawText("Aperte ESC para voltar ao menu", 220, 340, 20, WHITE);
 }
-                 }
+
+}

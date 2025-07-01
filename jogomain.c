@@ -5,7 +5,9 @@
 #include "game.h"
 #include "sois.h"
 #include "zumbis.h"
+#include "plantas.h"
 #include <stdbool.h> 
+#define MAX_HORDAS 10
 
 typedef struct {
 
@@ -23,7 +25,7 @@ int main(void){
     SetExitKey(0);
 
 
-    int horda[3];
+    int horda[MAX_HORDAS];
     int contador;
     
     FILE *leaderboardbin;
@@ -34,7 +36,10 @@ int main(void){
      }
      else{
         while(!feof(hordatxt)){
-            fscanf(hordatxt, "%d %d %d", &horda[0], &horda[1], &horda[2]); 
+            for(int i = 0; i < MAX_HORDAS; i++){
+                fscanf(hordatxt, "%d", &horda[i]);
+            }
+
         }
         fclose(hordatxt);}
      
@@ -85,6 +90,7 @@ int main(void){
     Image imagezumbi = LoadImage("sprites/zombie.png");
     Image imagebotaoinv = LoadImage("sprites/button.png");
     Image imageleaderboard = LoadImage("sprites/leaderboard.png");
+    Image imageprojetil = LoadImage ("sprites/peashooter-proj.png");
     ImageResize(&imagebackground, 800, 600);
     ImageResize(&imagegamebackground, 800, 600);
     ImageResize(&imagegrama, 72, 96); 
@@ -113,6 +119,7 @@ int main(void){
     Texture2D botaoinv = LoadTextureFromImage(imagebotaoinv);
     Texture2D botaoinv2 = LoadTextureFromImage(imagebotaoinv); // botao de inventario
     Texture2D leaderboard = LoadTextureFromImage(imageleaderboard); // botao de leaderboard
+    Texture2D projetil = LoadTextureFromImage(imageprojetil); // projetil
 
     float x = (screenWidth - background.width -110) / 2.0f;
     float y = (screenHeight - background.height) / 2.0f;  // apliquei a centralizacao do background
@@ -125,6 +132,7 @@ int main(void){
     Rectangle saidaNaoBounds = { + 400, + 320, botaomenugenerico.width * 0.1f, botaomenugenerico.height * 0.3f }; // definindo os limites do botao sair nao
 
 int permissaohordacontinua =1;
+
 
 InitZumbis();
 SpawnHorda(grama, horda[0], &permissaohordacontinua); // inicializando os zumbis e spawnando a primeira horda
@@ -187,7 +195,7 @@ SpawnHorda(grama, horda[0], &permissaohordacontinua); // inicializando os zumbis
             if (IsKeyPressed(KEY_ESCAPE)) { //se apertar esc, volta para o menu
                 currentScreen = MENU;
             }
-            desenhaGame(gamebackground, x, y, escalabackground, delta, grama, terra, girassol, ervilha, sol, botaoinv, botaoinv2, zumbi, horda, botaomenugenerico); //funcao que vem do game.c
+            desenhaGame(gamebackground, x, y, escalabackground, delta, grama, terra, girassol, ervilha, sol, botaoinv, botaoinv2, zumbi, horda, botaomenugenerico, projetil); //funcao que vem do game.c
         } break;
         
         case LEADERBOARD:
@@ -258,7 +266,7 @@ SpawnHorda(grama, horda[0], &permissaohordacontinua); // inicializando os zumbis
                 case JOGO:
                 {
                     
-                  desenhaGame(gamebackground, x, y, escalabackground, delta, grama, terra, girassol, ervilha, sol, botaoinv, botaoinv2, zumbi, horda, botaomenugenerico); //funcao que vem do game.c
+                  desenhaGame(gamebackground, x, y, escalabackground, delta, grama, terra, girassol, ervilha, sol, botaoinv, botaoinv2, zumbi, horda, botaomenugenerico, projetil); //funcao que vem do game.c
                   
                 } break;
                 case LEADERBOARD:
