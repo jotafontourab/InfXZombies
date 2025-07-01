@@ -11,13 +11,15 @@ void desenhaGame(Texture2D gamebackground,
                  float x,
                  float y,
                  float escalabackground, 
+                 float delta,
                  Texture2D grama, 
                  Texture2D terra,
                  Texture2D girassol,
                  Texture2D ervilha,
                  Texture2D sol,
                  Texture2D botaoinv,
-                 Texture2D botaoinv2);
+                 Texture2D botaoinv2,
+                 Texture2D zumbi);
                  
 extern int tabuleiro[LINHAS][COLUNAS]; // tive q declara-lo globalmente e externamente, para que a funcao possa acessar o tabuleiro e para que ele nao atualize
 // dentro do loop. precisei de uma ajudinha para descobrir isso kkkkkkkk

@@ -4,6 +4,7 @@
 #include "fechar.h"
 #include "game.h"
 #include "sois.h"
+#include "zumbis.h"
 
 typedef struct {
 
@@ -11,9 +12,6 @@ char nomejogador[25]; // nome do jogador
 int pontuacao; // pontuacao do jogador
 
 }JOGADOR;
-
-
-
 
 typedef enum GameScreen { MENU = 0, JOGO, LEADERBOARD, FECHAR } GameScreen;
 
@@ -49,12 +47,7 @@ int main(void){
             fclose(leaderboardbin);
         }
 
-     
-     
-     // abrir o arquivo txt que le o numero de zumbis por horda
-    // abrir o arquivo txt que le o numero de zumbis por horda
-
-    //abrir o arquivo 
+    float delta = GetFrameTime();
 
     GameScreen currentScreen = MENU;// Definindo a tela atual como MENU
 
@@ -92,10 +85,11 @@ int main(void){
     ImageResize(&imagegrama, 72, 96); 
     ImageResize(&imageterra, 72, 96);
     ImageResize(&imagesol, 70, 70); 
-    ImageResize(&imagegirassol, 120, 150);
-    ImageResize(&imageervilha, 120, 150);
+    ImageResize(&imagegirassol, 100, 130);
+    ImageResize(&imageervilha, 100, 130);
     ImageResize(&imagebotaoinv, 80, 100);
     ImageResize(&imageleaderboard, 550, 670);
+    ImageResize(&imagezumbi, 65,88);
     InitSois();
     //aqui eu carrego as texturas a partir das imagens que eu carreguei previamente
 
@@ -124,6 +118,11 @@ int main(void){
     Rectangle exitBounds = { + 365, + 455, botaosair.width * 0.2f, botaosair.height * 0.2f }; // definindo os limites do botao sair
     Rectangle saidaSimBounds = { + 280, + 320, botaomenugenerico.width * 0.1f, botaomenugenerico.height * 0.3f }; // definindo os limites do botao sair sim
     Rectangle saidaNaoBounds = { + 400, + 320, botaomenugenerico.width * 0.1f, botaomenugenerico.height * 0.3f }; // definindo os limites do botao sair nao
+
+
+InitZumbis();
+SpawnHorda(grama);
+
 
     // definindo os limites do botao inv
     while (WindowShouldClose() == false) {
@@ -248,8 +247,8 @@ int main(void){
                 case JOGO:
                 {
                     
-                  desenhaGame(gamebackground, x, y, escalabackground, grama, terra, girassol, ervilha, sol, botaoinv, botaoinv2); //funcao que vem do game.c
-             
+                  desenhaGame(gamebackground, x, y, escalabackground, delta, grama, terra, girassol, ervilha, sol, botaoinv, botaoinv2, zumbi); //funcao que vem do game.c
+                  
                 } break;
                 case LEADERBOARD:
                 {

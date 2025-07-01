@@ -1,6 +1,7 @@
 #include <raylib.h>
 #include "game.h"
 #include "sois.h"
+#include "zumbis.h"
 #define MARGEM_X 35
 #define MARGEM_Y 95
 #define LINHAS 5
@@ -23,14 +24,10 @@ typedef struct s_planta{
     int dano;
 }PLANTA;
 
-typedef struct s_zumbi{
-    int localizax;
-    int localizay;
-    int velocidadex;
-    int vida;
-}ZUMBI;
+
 
 int tabuleiro[LINHAS][COLUNAS] = { 0 };
+
 
 PlantaSelecionada plantaSelecionada = SELECAO_NENHUMA;
 
@@ -39,17 +36,19 @@ void desenhaGame(Texture2D gamebackground,
                  float x,
                  float y,
                  float escalabackground, 
+                 float delta,
                  Texture2D grama, 
                  Texture2D terra,
                  Texture2D girassol,
                  Texture2D ervilha,
                  Texture2D sol,
                  Texture2D botaoinv,
-                 Texture2D botaoinv2) {
+                 Texture2D botaoinv2,
+                 Texture2D zumbi) {
 
-int botaoclicado = 0; // Variável para controlar o botão clicado, para que a confirmação de clique não fique ativa, para conseguir colocar as plantas no tabuleiro
+int botaoclicado = 0; // variável para controlar o botão clicado, para que a confirmação de clique não fique ativa, para conseguir colocar as plantas no tabuleiro
 int soiscont = 0;
- // Variável para controlar o botão clicado, para que a confirmacao de clique nao fique ativa, para conseguir colocar as plantas no tabuleiro
+
 
 
 
@@ -75,8 +74,8 @@ bool btnAction = false;         // Button action should be activated | verificar
           DrawTexture(botaoinv, 170, 14, WHITE); 
           DrawTexture(botaoinv, 280, 14, WHITE); 
           DrawTextureEx(sol, (Vector2){ 50, 22 }, 0.0f, 1.2f, WHITE);
-          DrawTextureEx(girassol, (Vector2){ 160, 12 }, 0.0f, 0.85f, WHITE);
-          DrawTextureEx(ervilha, (Vector2){ 270, 12 }, 0.0f, 0.85f, WHITE);
+          DrawTextureEx(girassol, (Vector2){ 170, 6 }, 0.0f, 0.7f, WHITE);
+          DrawTextureEx(ervilha, (Vector2){ 280, 6 }, 0.0f, 0.7f, WHITE);
           Rectangle botaogirassolBounds = { +170 , + 15, botaoinv.width , botaoinv.height  }; 
           Rectangle botaoervilhaBounds ={ +280, +15, botaoinv.width , botaoinv.height  };
           DrawText("50", 200,88 , 26, BLACK);
@@ -120,12 +119,14 @@ if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
         float y = MARGEM_Y + i * grama.height;
 
         if (tabuleiro[i][j] == 1)
-            DrawTexture(ervilha, x, y, WHITE);
+            DrawTexture(ervilha, x+15, y-15, WHITE);
         else if (tabuleiro[i][j] == 2)
-            DrawTexture(girassol, x, y, WHITE);
+            DrawTexture(girassol, x+15, y-15, WHITE);
     }
 }
 
+AtualizaZumbis(delta, grama);
+DesenhaZumbis(zumbi);
 }
 
 //if (IsKeyPressed(KEY_ESCAPE)) { //se apertar esc, volta para o menu
