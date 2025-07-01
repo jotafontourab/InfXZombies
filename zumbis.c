@@ -5,7 +5,7 @@
 #include <stdbool.h> // nao conhecia essa biblioteca, mas tive que inclui-la pq para criar uma funcao booleana (necessaria, pois tenho que saber se
 //ha zombis vivos ainda para poder decidir se a proxima horda vai ser spawnada ou nao) tenho que importala.
 // #define VIDA_ZUMBI 100
-#define VELOCIDADE_ZUMBI 45.0f
+#define VELOCIDADE_ZUMBI 15.0f
 #define HORA_SPAWN_HORDA 15.0f
 #define MARGEM_X 35
 #define MARGEM_Y 95
@@ -15,8 +15,9 @@ float tempoParaHorda = 0.0f;
 
 ZUMBI zumbis[NUM_MAXDEZUMBIS];  
 
-int  hordanum=0;
+int numHordas = 0; //parametro global, que recebe o numero de hordas DIRETAMENTE DO ARQUIVO TEXTO e dps compara com hordanum, para saber quando terminaram as hordas e quando o jogador venceu.
 
+int hordanum = 0; // numero da horda atual, que vai ser spawnada
 void InitZumbis(void) {
     for (int i = 0; i < NUM_MAXDEZUMBIS; i++) {
         zumbis[i].ativo = false;
@@ -25,6 +26,7 @@ void InitZumbis(void) {
         zumbis[i].linha = 0;
         zumbis[i].velocidade = VELOCIDADE_ZUMBI;
     }
+
 
     tempoParaHorda = 0.0f;  // reseta o tempo entre hordas
 }
@@ -62,25 +64,27 @@ void AtualizaZumbis(float delta, Texture2D grama, int horda[], Texture2D botaonu
         return; 
     }
 
-    
-    
-    if (tempoParaHorda >= HORA_SPAWN_HORDA && !TemZumbisVivos() && *permissaohordacontinua ==1) {
-   
-       
-       
-        if (hordanum < 3 && *permissaohordacontinua==1) {
-    SpawnHorda(grama, horda[hordanum], permissaohordacontinua);
-    hordanum++;
-    tempoParaHorda = 0.0f;
-}                                                                        //   for(int i=0; i<NUM_MAXDEZUMBIS; i++) {   //ao inves de fazer assim
-                                                                       //     if (zumbis[i].ativo) {
+
+if (*permissaohordacontinua == 1 && !TemZumbisVivos()) {                                                             //   for(int i=0; i<NUM_MAXDEZUMBIS; i++) {   //ao inves de fazer assim
+                                                                                    // if (zumbis[i].ativo) {
                                                                                     //    algumvivo=1;
                                                                                     //    }else{
                                                                                     //       todosinativos=0;
                                                                                     //   }
-                                                                                //}
-                                                                  // if(todosinativos==1){
+                                                                                    //}
+                                                                                    // if(todosinativos==1){
+    if (hordanum < numHordas && tempoParaHorda >= HORA_SPAWN_HORDA) {
+        SpawnHorda(grama, horda[hordanum], permissaohordacontinua);
+        hordanum++;
+        tempoParaHorda = 0.0f;
     }
+    else if (hordanum >= numHordas) {
+        *permissaohordacontinua = 0;
+        jogoVencido = true;
+    }
+}
+
+
     
 
     for (int i = 0; i < NUM_MAXDEZUMBIS; i++) {
@@ -94,6 +98,11 @@ void AtualizaZumbis(float delta, Texture2D grama, int horda[], Texture2D botaonu
              if (tabuleiro[zumbis[i].linha][col] != 0) {
                tabuleiro[zumbis[i].linha][col] = 0;
             }
+
+            if (hordanum >= numHordas && !TemZumbisVivos()) {
+            *permissaohordacontinua = 0;
+            jogoVencido = true;  // variável de vitória
+}
  }
 
 
@@ -101,6 +110,9 @@ void AtualizaZumbis(float delta, Texture2D grama, int horda[], Texture2D botaonu
                 //criar tela pra perder o jogo e voltar pro menu. lembrar de adotar os pontos e salvar dentro do arquivo binario. 
                 zumbis[i].ativo = false;
                 *permissaohordacontinua = 0;
+    DrawRectangle(0, 0, GetScreenWidth(), GetScreenHeight(), Fade(BLACK, 0.5f));
+    DrawText("GAME OVER", 250, 280, 50, RED);
+    DrawText("Aperte ESC para voltar ao menu", 220, 340, 20, WHITE);
                 
         }
         }

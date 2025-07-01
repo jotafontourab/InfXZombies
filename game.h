@@ -2,10 +2,12 @@
 #define GAME_H
 #define LINHAS 5
 #define COLUNAS 9
+#include <stdbool.h>
 
 
 #include "raylib.h"
 
+extern bool jogoVencido;
 
 extern int permissaohordacontinua;
 

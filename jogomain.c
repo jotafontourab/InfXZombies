@@ -26,6 +26,7 @@ int main(void){
 
     int horda[MAX_HORDAS];
     int contador;
+    int totalhordas=0;
     
     FILE *leaderboardbin;
     JOGADOR jogadores[5];
@@ -36,9 +37,12 @@ int main(void){
      else{
         while(!feof(hordatxt)){
             for(int i = 0; i < MAX_HORDAS; i++){
+                if(!feof(hordatxt)){
                 fscanf(hordatxt, "%d", &horda[i]);
+                totalhordas++;}
             }
 
+            numHordas=totalhordas-1; // AQUI TB FICOU FEIO, MAS TIVE QUE ADCIONAR O -1 PQ SENAO ELE SEMPRE FAZIA UMA HORDA A MAIS QUE O NUMERO DE ELEMENTOS (NUMEROS) DO ARQ TXT.
         }
         fclose(hordatxt);}
      
@@ -267,7 +271,7 @@ SpawnHorda(grama, horda[0], &permissaohordacontinua); // inicializando os zumbis
                 {
                     
                   desenhaGame(gamebackground, x, y, escalabackground, delta, grama, terra, girassol, ervilha, sol, botaoinv, botaoinv2, zumbi, horda, botaomenugenerico, projetil); //funcao que vem do game.c
-                  
+                    
                 } break;
                 case LEADERBOARD:
                 {

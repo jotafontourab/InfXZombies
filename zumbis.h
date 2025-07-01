@@ -14,9 +14,11 @@ typedef struct {
 
 extern ZUMBI zumbis[NUM_MAXDEZUMBIS];
 
-extern int ordanum;
+extern int numHordas;
 
-void InitZumbis(void);
+extern bool jogoVencido;
+
+void InitZumbis(void); // funcao que reseta todas as variaveis do jogo, para que o jogo possa reiniciar
 
 bool TemZumbisVivos(void);
 

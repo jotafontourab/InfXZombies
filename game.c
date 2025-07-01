@@ -31,6 +31,8 @@ int permissaohordacontinua = 1;
 
 int tabuleiro[LINHAS][COLUNAS] = { 0 };
 
+bool jogoVencido = false;
+
 
 PlantaSelecionada plantaSelecionada = SELECAO_NENHUMA;
 
@@ -38,8 +40,7 @@ PlantaSelecionada plantaSelecionada = SELECAO_NENHUMA;
 void initGame(Texture2D grama, Texture2D botaomenugenerico, int horda[]) { //funcao que reseta todas as variaveis do jogo, para que o jogo possa reiniciar
     InitPlantas(); 
     InitSois();
-    InitZumbis();
-    int ordanum = 0; // reseta o numero da horda
+    InitZumbis();// reseta o numero da horda
     permissaohordacontinua = 1;
     
     
@@ -187,10 +188,12 @@ DesenhaZumbis(zumbi);
 DesenharProjeteis(projetil);
 }
 
-if (permissaohordacontinua == 0) {
+if (jogoVencido) {
     DrawRectangle(0, 0, GetScreenWidth(), GetScreenHeight(), Fade(BLACK, 0.5f));
-    DrawText("GAME OVER", 250, 280, 50, RED);
+    DrawText("PARABÉNS! VOCÊ VENCEU!", 75, 280, 50, GREEN);
     DrawText("Aperte ESC para voltar ao menu", 220, 340, 20, WHITE);
+    
 }
+
 
 }
