@@ -47,7 +47,7 @@ int main(void){
             fclose(leaderboardbin);
         }
 
-    float delta = GetFrameTime();
+    
 
     GameScreen currentScreen = MENU;// Definindo a tela atual como MENU
 
@@ -126,6 +126,8 @@ SpawnHorda(grama);
 
     // definindo os limites do botao inv
     while (WindowShouldClose() == false) {
+
+        float delta = GetFrameTime();
         AtualizaSois();
         // Update de telas
         switch (currentScreen)

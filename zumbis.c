@@ -3,7 +3,7 @@
 #include "game.h"
 #include "zumbis.h"
 // #define VIDA_ZUMBI 100
-#define VELOCIDADE_ZUMBI 60.0f
+#define VELOCIDADE_ZUMBI 12.0f
 #define HORA_SPAWN_HORDA 10.0f
 #define MARGEM_X 35
 #define MARGEM_Y 95
@@ -31,7 +31,7 @@ void InitZumbis(void) {
         zumbis[i].velocidade = VELOCIDADE_ZUMBI;
     }
 
-    tempoParaHorda = 0.0f;  // reseta o tempo entre hordas
+    tempoParaHorda = f;  // reseta o tempo entre hordas
 }
 
 
@@ -68,11 +68,11 @@ void AtualizaZumbis(float delta, Texture2D grama) {
             
             int col = (zumbis[i].pos.x - MARGEM_X + grama.width / 2) / grama.width;
 
-            if (col >= 0 && col < COLUNAS) {
-                if (tabuleiro[zumbis[i].linha][col] != 0) {
-                    tabuleiro[zumbis[i].linha][col] = 0;
-                }
+         if (col >= 0 && col < COLUNAS) {
+             if (tabuleiro[zumbis[i].linha][col] != 0) {
+               tabuleiro[zumbis[i].linha][col] = 0;
             }
+ }
 
 
             if (zumbis[i].pos.x < 0) zumbis[i].ativo = false;
