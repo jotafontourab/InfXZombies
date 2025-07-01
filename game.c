@@ -188,12 +188,19 @@ DesenhaZumbis(zumbi);
 DesenharProjeteis(projetil);
 }
 
-if (jogoVencido) {
-    DrawRectangle(0, 0, GetScreenWidth(), GetScreenHeight(), Fade(BLACK, 0.5f));
-    DrawText("PARABÉNS! VOCÊ VENCEU!", 75, 280, 50, GREEN);
-    DrawText("Aperte ESC para voltar ao menu", 220, 340, 20, WHITE);
-    
+
+    if (permissaohordacontinua == 0) {
+        if (jogoVencido) {
+            DrawRectangle(0, 0, 800, 600, Fade(GREEN, 0.5f));
+            DrawText("Parabéns! Você venceu!", 170, 280, 30, DARKGREEN);
+            DrawText("Aperte ESC para voltar ao menu", 200 , 340, 20, WHITE);
+        } else {
+            DrawRectangle(0, 0, 800, 600, Fade(BLACK, 0.5f));
+            DrawText("GAME OVER", 250, 280, 50, RED);
+            DrawText("Aperte ESC para voltar ao menu", 220, 340, 20, WHITE);
+        }
+    }
 }
 
 
-}
+
