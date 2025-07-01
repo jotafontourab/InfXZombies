@@ -6,16 +6,12 @@
 #include "sois.h"
 #include "zumbis.h"
 #include "plantas.h"
+#include "leaderboard.h"
 #include <stdbool.h> 
+#include <string.h>
 #define MAX_HORDAS 10
 
-typedef struct {
-
-char nomejogador[25]; // nome do jogador
-int pontuacao; // pontuacao do jogador
-}JOGADOR;
-
-typedef enum GameScreen { MENU = 0, JOGO, LEADERBOARD, FECHAR } GameScreen;
+typedef enum GameScreen { MENU = 0, JOGO, LEADERBOARD, FECHAR, NOME } GameScreen;
 
 
 int main(void){
@@ -24,13 +20,15 @@ int main(void){
     SetExitKey(0);
 
 
+
     int horda[MAX_HORDAS];
     int contador;
     int totalhordas=0;
+    char nomeJogador[25];
     
-    FILE *leaderboardbin;
     JOGADOR jogadores[5];
     FILE *hordatxt;
+
     if(!(hordatxt = fopen("config.txt", "r"))){
         printf("Erro ao abrir o arquivo horda.txt para leitura\n");
      }
@@ -38,28 +36,15 @@ int main(void){
         while(!feof(hordatxt)){
             for(int i = 0; i < MAX_HORDAS; i++){
                 if(!feof(hordatxt)){
-                fscanf(hordatxt, "%d", &horda[i]);
+                fscanf(hordatxt, "%d ", &horda[i]);
                 totalhordas++;}
             }
 
-            numHordas=totalhordas-1; // AQUI TB FICOU FEIO, MAS TIVE QUE ADCIONAR O -1 PQ SENAO ELE SEMPRE FAZIA UMA HORDA A MAIS QUE O NUMERO DE ELEMENTOS (NUMEROS) DO ARQ TXT.
+            numHordas=totalhordas; // AQUI TB FICOU FEIO, MAS TIVE QUE ADCIONAR O -1 PQ SENAO ELE SEMPRE FAZIA UMA HORDA A MAIS QUE O NUMERO DE ELEMENTOS (NUMEROS) DO ARQ TXT.
         }
         fclose(hordatxt);}
-     
-     if(!(leaderboardbin = fopen("top_scores.bin", "ab+"))){ //tive que mudar as config de compilação do vscode p criar um arquivo, que encaixasse com
-        //a struct jogador criada
 
-        //falta implementar a comparação e a escrita do arquivo binario, para que o jogo salve os dados dos jogadores novos que cruzarem os pontos dos atuais
-        printf("Erro ao abrir o arquivo leaderboard.bin para leitura\n");
-        }else{
-            for(contador = 0; contador < 5; contador++){
-                if(fread(&jogadores[contador], sizeof(JOGADOR), 5 , leaderboardbin)== 5){
-                    printf("leitura biniaria OK!\n");
-                }
-            }
-            fclose(leaderboardbin);
-        }
-
+    CarregaLeaderboard(jogadores, 5);
     
 
     GameScreen currentScreen = MENU;// Definindo a tela atual como MENU
@@ -151,6 +136,7 @@ SpawnHorda(grama, horda[0], &permissaohordacontinua); // inicializando os zumbis
         {
         case MENU:
         {
+
             mousePoint = GetMousePosition();
             btnAction = false;
 
@@ -163,7 +149,7 @@ SpawnHorda(grama, horda[0], &permissaohordacontinua); // inicializando os zumbis
                 if (IsMouseButtonReleased(MOUSE_BUTTON_LEFT)) btnAction = true;
                 if (btnAction){
               
-                currentScreen = JOGO;
+                currentScreen = NOME;
                 initGame(grama, botaomenugenerico, horda);
                 }
             }
@@ -194,12 +180,57 @@ SpawnHorda(grama, horda[0], &permissaohordacontinua); // inicializando os zumbis
         
         } break;
 
+        case NOME:{ // precisei pesquisar bastante para fazer essa parte, pois um fgets normal nao adiantava para ler o nome de forma correta.
+
+    DrawTexture(background, x, y, WHITE);
+    DrawText("Digite seu nome:", 300, 200, 20, BLACK);
+    Rectangle caixa = {250, 230, 300, 50};
+    DrawRectangleRec(caixa, LIGHTGRAY);
+    DrawRectangleLinesEx((Rectangle){250, 230, 300, 50}, 2, BLACK);
+
+    static char nomeInput[25] = {0};
+    static int letterCount = 0;
+
+    int key = GetCharPressed();
+    while (key > 0) {
+        if ((key >= 32) && (key <= 125) && (letterCount < 24)) {
+            nomeInput[letterCount] = (char)key;
+            nomeInput[letterCount+1] = '\0';
+            letterCount++;
+        }
+        key = GetCharPressed();
+    }
+
+    if (IsKeyPressed(KEY_BACKSPACE)) {
+        letterCount--;
+        if (letterCount < 0) letterCount = 0;
+        nomeInput[letterCount] = '\0';
+    }
+
+    DrawText(nomeInput, 260, 245, 20, BLACK);
+
+    if (IsKeyPressed(KEY_ENTER) && letterCount > 0) {
+        strcpy(jogador.nomejogador, nomeInput); // Salva o nome no struct jogador
+        currentScreen = JOGO;
+        letterCount = 0;
+        memset(nomeInput, 0, sizeof(nomeInput));
+    }
+
+    if (IsKeyPressed(KEY_ESCAPE)) {
+        currentScreen = MENU;
+    }
+    } break;
         case JOGO:
         {
+            if (currentScreen == JOGO && permissaohordacontinua == 0 && IsKeyPressed(KEY_ESCAPE)) {
+            SalvaPontuacaoFinal(nomeJogador, pontuacao);  // ✅ AQUI!
+            currentScreen = MENU;
+}
             if (IsKeyPressed(KEY_ESCAPE)) { //se apertar esc, volta para o menu
                 currentScreen = MENU;
             }
             desenhaGame(gamebackground, x, y, escalabackground, delta, grama, terra, girassol, ervilha, sol, botaoinv, botaoinv2, zumbi, horda, botaomenugenerico, projetil); //funcao que vem do game.c
+        
         } break;
         
         case LEADERBOARD:
@@ -304,12 +335,6 @@ SpawnHorda(grama, horda[0], &permissaohordacontinua); // inicializando os zumbis
         
         EndDrawing();
     }
-    {
-        /* code */
-    }
-    
-    
-    
-    
+ 
     return 0;
 }

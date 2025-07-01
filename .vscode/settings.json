@@ -19,6 +19,8 @@
 		"stdbool.h": "c",
 		"zumbis.h": "c",
 		"*.m": "c",
-		"plantas.h": "c"
+		"plantas.h": "c",
+		"leaderboard.h": "c",
+		"string.h": "c"
 	}
 }

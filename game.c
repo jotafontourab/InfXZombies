@@ -3,7 +3,9 @@
 #include "sois.h"
 #include "zumbis.h"
 #include "plantas.h"
+#include "leaderboard.h"
 #include <stdbool.h> 
+#include <string.h>
 #define MARGEM_X 35
 #define MARGEM_Y 95
 #define LINHAS 5
@@ -13,8 +15,12 @@
 #define INTERVALO_DISPARO_ERVILHA 10.0f 
 #define INTERVALO_DISPARO_GIRASSOL 13.0f 
 #define DANO_ERVILHA 20
-#define DANO_GIRASSOL 10
+#define DANO_GIRASSOL 15
 #define VELOCIDADE_PROJETIL 15.0f
+
+
+
+JOGADOR jogador; // Variável global para armazenar o jogador atual
 
 
 
@@ -24,6 +30,8 @@ typedef enum {
     SELECIONANDO_GIRASSOL
 } PlantaSelecionada;
 
+
+int pontuacao = 0;
 
 static float tempoDesdeUltimoDisparo[LINHAS][COLUNAS] = {0};
 
@@ -36,8 +44,21 @@ bool jogoVencido = false;
 
 PlantaSelecionada plantaSelecionada = SELECAO_NENHUMA;
 
+#include <string.h>
+#include "leaderboard.h"
+
+void SalvaPontuacaoFinal(const char *nomeJogador, int pontuacao) {
+    JOGADOR jogadores[5], atual;
+    CarregaLeaderboard(jogadores, 5);
+    strcpy(atual.nomejogador, nomeJogador);
+    atual.pontuacao = pontuacao;
+    AtualizaLeaderboard(jogadores, 5, atual);
+    SalvaLeaderboard(jogadores, 5);
+}
+
 
 void initGame(Texture2D grama, Texture2D botaomenugenerico, int horda[]) { //funcao que reseta todas as variaveis do jogo, para que o jogo possa reiniciar
+    pontuacao=0;
     InitPlantas(); 
     InitSois();
     InitZumbis();// reseta o numero da horda
@@ -50,7 +71,6 @@ void initGame(Texture2D grama, Texture2D botaomenugenerico, int horda[]) { //fun
             tabuleiro[i][j] = 0;
         }
     }
-     SpawnHorda(grama, horda[0], &permissaohordacontinua);
 }
 
 
@@ -72,7 +92,7 @@ void desenhaGame(Texture2D gamebackground,
                  Texture2D projetil) {
 
 int botaoclicado = 0; // variável para controlar o botão clicado, para que a confirmação de clique não fique ativa, para conseguir colocar as plantas no tabuleiro
-
+char jogadorNome[25];
 
 AtualizarProjeteis(delta, zumbi);
 
@@ -188,18 +208,21 @@ DesenhaZumbis(zumbi);
 DesenharProjeteis(projetil);
 }
 
-
-    if (permissaohordacontinua == 0) {
-        if (jogoVencido) {
-            DrawRectangle(0, 0, 800, 600, Fade(GREEN, 0.5f));
-            DrawText("Parabéns! Você venceu!", 170, 280, 30, DARKGREEN);
-            DrawText("Aperte ESC para voltar ao menu", 200 , 340, 20, WHITE);
-        } else {
-            DrawRectangle(0, 0, 800, 600, Fade(BLACK, 0.5f));
-            DrawText("GAME OVER", 250, 280, 50, RED);
-            DrawText("Aperte ESC para voltar ao menu", 220, 340, 20, WHITE);
-        }
+if (permissaohordacontinua == 0) {
+    if (jogoVencido) {
+        DrawRectangle(0, 0, 800, 600, Fade(GREEN, 0.5f));
+        DrawText("Parabéns! Você venceu!", 170, 280, 30, DARKGREEN);
+        DrawText(TextFormat("Pontuação: %d", pontuacao), 300, 320, 30, WHITE); // Mostra a pontuação
+        DrawText("Aperte ESC para voltar ao menu", 200, 340, 20, WHITE);
+        SalvaPontuacaoFinal(jogador.nomejogador, pontuacao);
+    } else {
+        DrawRectangle(0, 0, 800, 600, Fade(BLACK, 0.5f));
+        DrawText("GAME OVER", 250, 280, 50, RED);
+        DrawText(TextFormat("Pontuação: %d", pontuacao), 300, 320, 30, WHITE); // Mostra a pontuação
+        DrawText("Aperte ESC para voltar ao menu", 220, 340, 20, WHITE);
+        SalvaPontuacaoFinal(jogador.nomejogador, pontuacao);
     }
+}
 }
 
 

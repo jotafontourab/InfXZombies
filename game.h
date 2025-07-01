@@ -3,13 +3,18 @@
 #define LINHAS 5
 #define COLUNAS 9
 #include <stdbool.h>
-
-
 #include "raylib.h"
+#include "leaderboard.h"
 
 extern bool jogoVencido;
 
+extern JOGADOR jogador;
+
 extern int permissaohordacontinua;
+
+extern int pontuacao;
+
+void SalvaPontuacaoFinal(const char *nomeJogador, int pontuacao) ;
 
 void initGame(Texture2D grama, Texture2D botaomenugenerico, int horda[]); // funcao que reseta todas as variaveis do jogo, para que o jogo possa reiniciar
 

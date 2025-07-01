@@ -91,6 +91,7 @@ if (*permissaohordacontinua == 1 && !TemZumbisVivos()) {                        
         if (zumbis[i].ativo) {
             zumbis[i].pos.x -= zumbis[i].velocidade * delta;
 
+
             
             int col = (zumbis[i].pos.x - MARGEM_X + grama.width / 2) / grama.width;
 

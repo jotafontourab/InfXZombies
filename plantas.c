@@ -3,13 +3,12 @@
 
 Projetil projeteis[MAX_PROJETEIS];
 
-int pontuacao = 0; // Variável global para armazenar a pontuação
 
 void InitPlantas(void) {
     for (int i = 0; i < MAX_PROJETEIS; i++) {
         projeteis[i].ativo = false;
     }
-    pontuacao = 0;
+
 }
 
 
