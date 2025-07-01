@@ -7,6 +7,8 @@
 #include "raylib.h"
 
 
+extern int permissaohordacontinua; 
+
 void desenhaGame(Texture2D gamebackground,
                  float x,
                  float y,
@@ -20,7 +22,8 @@ void desenhaGame(Texture2D gamebackground,
                  Texture2D botaoinv,
                  Texture2D botaoinv2,
                  Texture2D zumbi,
-                 int horda[]);
+                 int horda[],
+                 Texture2D botaomenugenerico);
                  
 extern int tabuleiro[LINHAS][COLUNAS]; // tive q declara-lo globalmente e externamente, para que a funcao possa acessar o tabuleiro e para que ele nao atualize
 // dentro do loop. precisei de uma ajudinha para descobrir isso kkkkkkkk

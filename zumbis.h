@@ -17,9 +17,9 @@ void InitZumbis(void);
 
 bool TemZumbisVivos(void);
 
-void AtualizaZumbis(float delta, Texture2D grama, int horda[]);
+void AtualizaZumbis(float delta, Texture2D grama, int horda[], Texture2D botaomenugenerico, int *permissaohordacontinua);
 
-void SpawnHorda(Texture2D grama, int horda);
+void SpawnHorda(Texture2D grama, int horda, int *permissaohordacontinua);
 
 void DesenhaZumbis(Texture2D zumbi);
 

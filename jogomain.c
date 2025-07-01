@@ -124,9 +124,10 @@ int main(void){
     Rectangle saidaSimBounds = { + 280, + 320, botaomenugenerico.width * 0.1f, botaomenugenerico.height * 0.3f }; // definindo os limites do botao sair sim
     Rectangle saidaNaoBounds = { + 400, + 320, botaomenugenerico.width * 0.1f, botaomenugenerico.height * 0.3f }; // definindo os limites do botao sair nao
 
+int permissaohordacontinua =1;
 
 InitZumbis();
-SpawnHorda(grama, horda[0]); 
+SpawnHorda(grama, horda[0], &permissaohordacontinua); // inicializando os zumbis e spawnando a primeira horda
 
 
     // definindo os limites do botao inv
@@ -150,7 +151,7 @@ SpawnHorda(grama, horda[0]);
 
                 if (IsMouseButtonReleased(MOUSE_BUTTON_LEFT)) btnAction = true;
                 if (btnAction){
-                // Change to JOGO screen
+              
                 currentScreen = JOGO;
                 }
             }
@@ -162,7 +163,7 @@ SpawnHorda(grama, horda[0]);
 
             if (IsMouseButtonReleased(MOUSE_BUTTON_LEFT)) btnAction = true;
             if (btnAction){
-            // Change to JOGO screen
+          
             currentScreen = LEADERBOARD;
         }
     }
@@ -173,7 +174,7 @@ SpawnHorda(grama, horda[0]);
 
             if (IsMouseButtonReleased(MOUSE_BUTTON_LEFT)) btnAction = true;
             if (btnAction){
-            // Change to JOGO screen
+          
             currentScreen = FECHAR;
         }
     }
@@ -183,7 +184,10 @@ SpawnHorda(grama, horda[0]);
 
         case JOGO:
         {
-
+            if (IsKeyPressed(KEY_ESCAPE)) { //se apertar esc, volta para o menu
+                currentScreen = MENU;
+            }
+            desenhaGame(gamebackground, x, y, escalabackground, delta, grama, terra, girassol, ervilha, sol, botaoinv, botaoinv2, zumbi, horda, botaomenugenerico); //funcao que vem do game.c
         } break;
         
         case LEADERBOARD:
@@ -227,7 +231,7 @@ SpawnHorda(grama, horda[0]);
 
             if (IsMouseButtonReleased(MOUSE_BUTTON_LEFT)) btnAction = true;
             if (btnAction){
-            // Change to JOGO screen
+          
             currentScreen = MENU; // aqui eu volto para o menu, pois o usuario nao quer sair do jogo.
         }
     }
@@ -254,7 +258,7 @@ SpawnHorda(grama, horda[0]);
                 case JOGO:
                 {
                     
-                  desenhaGame(gamebackground, x, y, escalabackground, delta, grama, terra, girassol, ervilha, sol, botaoinv, botaoinv2, zumbi, horda); //funcao que vem do game.c
+                  desenhaGame(gamebackground, x, y, escalabackground, delta, grama, terra, girassol, ervilha, sol, botaoinv, botaoinv2, zumbi, horda, botaomenugenerico); //funcao que vem do game.c
                   
                 } break;
                 case LEADERBOARD:

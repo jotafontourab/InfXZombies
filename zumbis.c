@@ -11,12 +11,11 @@
 #define MARGEM_Y 95
 
 
-
 float tempoParaHorda = 0.0f;
 
 ZUMBI zumbis[NUM_MAXDEZUMBIS];  
 
-int  ordanum=0;
+int  hordanum=0;
 
 void InitZumbis(void) {
     for (int i = 0; i < NUM_MAXDEZUMBIS; i++) {
@@ -39,8 +38,9 @@ bool TemZumbisVivos(void) {
     return false;  // Só chega aqui se nenhum zumbi estiver ativo
 }
 
-void SpawnHorda(Texture2D grama, int horda) {
+void SpawnHorda(Texture2D grama, int horda, int *permissaohordacontinua) {
     int spawnados = 0;
+    if (*permissaohordacontinua == 0) return;
 
     for (int i = 0; i < NUM_MAXDEZUMBIS && spawnados < horda; i++) {
         if (!zumbis[i].ativo) {
@@ -48,30 +48,38 @@ void SpawnHorda(Texture2D grama, int horda) {
             zumbis[i].vida = 100;
             zumbis[i].linha = GetRandomValue(0, 5 - 1); // 5 eh o num de linhas
             zumbis[i].velocidade = VELOCIDADE_ZUMBI;
-            zumbis[i].pos = (Vector2){
-                MARGEM_X + COLUNAS * grama.width + GetRandomValue(0, 100),   
-                MARGEM_Y + zumbis[i].linha * grama.height
+            zumbis[i].pos = (Vector2){MARGEM_X + COLUNAS * grama.width + GetRandomValue(0, 100), MARGEM_Y + zumbis[i].linha * grama.height
             };
             spawnados++;
         }
     }
 }
 
-void AtualizaZumbis(float delta, Texture2D grama, int horda[]) {
+void AtualizaZumbis(float delta, Texture2D grama, int horda[], Texture2D botaonumgenerico, int *permissaohordacontinua) {
     tempoParaHorda += delta;
-   
 
-    if (tempoParaHorda >= HORA_SPAWN_HORDA && !TemZumbisVivos()) {
-                                                                                //   for(int i=0; i<NUM_MAXDEZUMBIS; i++) {   //ao inves de fazer assim
-        ordanum++;                                                                       //     if (zumbis[i].ativo) {
+   if (*permissaohordacontinua == 0){
+        return; 
+    }
+
+    
+    
+    if (tempoParaHorda >= HORA_SPAWN_HORDA && !TemZumbisVivos() && *permissaohordacontinua ==1) {
+   
+       
+       
+        if (hordanum < 3 && *permissaohordacontinua==1) {
+    SpawnHorda(grama, horda[hordanum], permissaohordacontinua);
+    hordanum++;
+    tempoParaHorda = 0.0f;
+}                                                                        //   for(int i=0; i<NUM_MAXDEZUMBIS; i++) {   //ao inves de fazer assim
+                                                                       //     if (zumbis[i].ativo) {
                                                                                     //    algumvivo=1;
                                                                                     //    }else{
                                                                                     //       todosinativos=0;
                                                                                     //   }
                                                                                 //}
-                                                                                    // if(todosinativos==1){
-        SpawnHorda(grama, horda[ordanum]);
-        tempoParaHorda = 0.0f;
+                                                                  // if(todosinativos==1){
     }
     
 
@@ -89,10 +97,16 @@ void AtualizaZumbis(float delta, Texture2D grama, int horda[]) {
  }
 
 
-            if (zumbis[i].pos.x < 0) zumbis[i].ativo = false;
+            if (zumbis[i].pos.x < 0) {          // se o zumbi sair da tela, ele é considerado morto e alem disso, o jogador perde o jogo, entao
+                //criar tela pra perder o jogo e voltar pro menu. lembrar de adotar os pontos e salvar dentro do arquivo binario. 
+                zumbis[i].ativo = false;
+                *permissaohordacontinua = 0;
+                
+        }
         }
     }
 }
+
 
 void DesenhaZumbis(Texture2D zumbi) {
     for (int i = 0; i < NUM_MAXDEZUMBIS; i++) {
@@ -101,3 +115,4 @@ void DesenhaZumbis(Texture2D zumbi) {
         }
     }
 }
+

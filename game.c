@@ -25,7 +25,7 @@ typedef struct s_planta{
     int dano;
 }PLANTA;
 
-
+int permissaohordacontinua = 1; 
 
 int tabuleiro[LINHAS][COLUNAS] = { 0 };
 
@@ -46,11 +46,11 @@ void desenhaGame(Texture2D gamebackground,
                  Texture2D botaoinv,
                  Texture2D botaoinv2,
                  Texture2D zumbi,
-                 int horda[]) {
+                 int horda[],
+                 Texture2D botaomenugenerico) {
 
 int botaoclicado = 0; // variável para controlar o botão clicado, para que a confirmação de clique não fique ativa, para conseguir colocar as plantas no tabuleiro
 int soiscont = 0;
-
 
 
 
@@ -127,12 +127,14 @@ if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
             DrawTexture(girassol, x+15, y-15, WHITE);
     }
 }
-
-AtualizaZumbis(delta, grama, horda); // Atualiza os zumbis, passando o delta e a textura da grama
+if(permissaohordacontinua ==1){
+AtualizaZumbis(delta, grama, horda, botaomenugenerico, &permissaohordacontinua); // Atualiza os zumbis, passando o delta e a textura da grama
 DesenhaZumbis(zumbi);
 }
 
-//if (IsKeyPressed(KEY_ESCAPE)) { //se apertar esc, volta para o menu
-            
-//            currentScreen = OPCAOSAIR;
-//}
+if (permissaohordacontinua == 0) {
+    DrawRectangle(0, 0, GetScreenWidth(), GetScreenHeight(), Fade(BLACK, 0.5f));
+    DrawText("GAME OVER", 250, 280, 50, RED);
+    DrawText("Aperte ESC para voltar ao menu", 160, 340, 20, WHITE);
+}
+                 }
