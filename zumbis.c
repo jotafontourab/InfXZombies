@@ -2,25 +2,21 @@
 #include <stdio.h>
 #include "game.h"
 #include "zumbis.h"
+#include <stdbool.h> // nao conhecia essa biblioteca, mas tive que inclui-la pq para criar uma funcao booleana (necessaria, pois tenho que saber se
+//ha zombis vivos ainda para poder decidir se a proxima horda vai ser spawnada ou nao) tenho que importala.
 // #define VIDA_ZUMBI 100
-#define VELOCIDADE_ZUMBI 12.0f
+#define VELOCIDADE_ZUMBI 40.0f
 #define HORA_SPAWN_HORDA 10.0f
 #define MARGEM_X 35
 #define MARGEM_Y 95
 
-int zumbisPorHorda = 5;
+
 
 float tempoParaHorda = 0.0f;
 
-Zumbi zumbis[NUM_MAXDEZUMBIS];  
+ZUMBI zumbis[NUM_MAXDEZUMBIS];  
 
-typedef struct {
-    Vector2 pos;       // posição na tela
-    int linha;         // linha em que ele esta (0 a 4)
-    float velocidade;  // vel de movimento
-    int vida;          // vida do zumbi (começa em 100)
-    bool ativo;        //se ta vivo
-} ZUMBI;
+int  ordanum=0;
 
 void InitZumbis(void) {
     for (int i = 0; i < NUM_MAXDEZUMBIS; i++) {
@@ -31,14 +27,22 @@ void InitZumbis(void) {
         zumbis[i].velocidade = VELOCIDADE_ZUMBI;
     }
 
-    tempoParaHorda = f;  // reseta o tempo entre hordas
+    tempoParaHorda = 0.0f;  // reseta o tempo entre hordas
 }
 
+bool TemZumbisVivos(void) {
+    for (int i = 0; i < NUM_MAXDEZUMBIS; i++) {
+        if (zumbis[i].ativo) {
+            return true;  // Sai da função AQUI MESMO se encontrar um vivo
+        }
+    }
+    return false;  // Só chega aqui se nenhum zumbi estiver ativo
+}
 
-void SpawnHorda(Texture2D grama) {
+void SpawnHorda(Texture2D grama, int horda) {
     int spawnados = 0;
 
-    for (int i = 0; i < NUM_MAXDEZUMBIS && spawnados < zumbisPorHorda; i++) {
+    for (int i = 0; i < NUM_MAXDEZUMBIS && spawnados < horda; i++) {
         if (!zumbis[i].ativo) {
             zumbis[i].ativo = true;
             zumbis[i].vida = 100;
@@ -53,13 +57,23 @@ void SpawnHorda(Texture2D grama) {
     }
 }
 
-void AtualizaZumbis(float delta, Texture2D grama) {
+void AtualizaZumbis(float delta, Texture2D grama, int horda[]) {
     tempoParaHorda += delta;
+   
 
-    if (tempoParaHorda >= HORA_SPAWN_HORDA) {
-        SpawnHorda(grama);
+    if (tempoParaHorda >= HORA_SPAWN_HORDA && !TemZumbisVivos()) {
+                                                                                //   for(int i=0; i<NUM_MAXDEZUMBIS; i++) {   //ao inves de fazer assim
+        ordanum++;                                                                       //     if (zumbis[i].ativo) {
+                                                                                    //    algumvivo=1;
+                                                                                    //    }else{
+                                                                                    //       todosinativos=0;
+                                                                                    //   }
+                                                                                //}
+                                                                                    // if(todosinativos==1){
+        SpawnHorda(grama, horda[ordanum]);
         tempoParaHorda = 0.0f;
     }
+    
 
     for (int i = 0; i < NUM_MAXDEZUMBIS; i++) {
         if (zumbis[i].ativo) {

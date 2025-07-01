@@ -2,6 +2,7 @@
 #include "game.h"
 #include "sois.h"
 #include "zumbis.h"
+#include <stdbool.h> 
 #define MARGEM_X 35
 #define MARGEM_Y 95
 #define LINHAS 5
@@ -44,7 +45,8 @@ void desenhaGame(Texture2D gamebackground,
                  Texture2D sol,
                  Texture2D botaoinv,
                  Texture2D botaoinv2,
-                 Texture2D zumbi) {
+                 Texture2D zumbi,
+                 int horda[]) {
 
 int botaoclicado = 0; // variável para controlar o botão clicado, para que a confirmação de clique não fique ativa, para conseguir colocar as plantas no tabuleiro
 int soiscont = 0;
@@ -79,6 +81,7 @@ bool btnAction = false;         // Button action should be activated | verificar
           Rectangle botaogirassolBounds = { +170 , + 15, botaoinv.width , botaoinv.height  }; 
           Rectangle botaoervilhaBounds ={ +280, +15, botaoinv.width , botaoinv.height  };
           DrawText("50", 200,88 , 26, BLACK);
+          DrawText("100", 310,88 , 26, BLACK);
           DrawSois();
           
 
@@ -125,7 +128,7 @@ if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
     }
 }
 
-AtualizaZumbis(delta, grama);
+AtualizaZumbis(delta, grama, horda); // Atualiza os zumbis, passando o delta e a textura da grama
 DesenhaZumbis(zumbi);
 }
 

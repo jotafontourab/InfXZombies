@@ -5,6 +5,7 @@
 #include "game.h"
 #include "sois.h"
 #include "zumbis.h"
+#include <stdbool.h> 
 
 typedef struct {
 
@@ -24,19 +25,23 @@ int main(void){
 
     int horda[3];
     int contador;
-    FILE *hordatxt;
+    
     FILE *leaderboardbin;
     JOGADOR jogadores[5];
-     if(!(hordatxt = fopen("config.txt", "r"))){
+    FILE *hordatxt;
+    if(!(hordatxt = fopen("config.txt", "r"))){
         printf("Erro ao abrir o arquivo horda.txt para leitura\n");
      }
      else{
         while(!feof(hordatxt)){
             fscanf(hordatxt, "%d %d %d", &horda[0], &horda[1], &horda[2]); 
         }
-        fclose(hordatxt);
-     }
-     if(!(leaderboardbin = fopen("top_scores.bin", "ab+"))){
+        fclose(hordatxt);}
+     
+     if(!(leaderboardbin = fopen("top_scores.bin", "ab+"))){ //tive que mudar as config de compilação do vscode p criar um arquivo, que encaixasse com
+        //a struct jogador criada
+
+        //falta implementar a comparação e a escrita do arquivo binario, para que o jogo salve os dados dos jogadores novos que cruzarem os pontos dos atuais
         printf("Erro ao abrir o arquivo leaderboard.bin para leitura\n");
         }else{
             for(contador = 0; contador < 5; contador++){
@@ -121,7 +126,7 @@ int main(void){
 
 
 InitZumbis();
-SpawnHorda(grama);
+SpawnHorda(grama, horda[0]); 
 
 
     // definindo os limites do botao inv
@@ -249,7 +254,7 @@ SpawnHorda(grama);
                 case JOGO:
                 {
                     
-                  desenhaGame(gamebackground, x, y, escalabackground, delta, grama, terra, girassol, ervilha, sol, botaoinv, botaoinv2, zumbi); //funcao que vem do game.c
+                  desenhaGame(gamebackground, x, y, escalabackground, delta, grama, terra, girassol, ervilha, sol, botaoinv, botaoinv2, zumbi, horda); //funcao que vem do game.c
                   
                 } break;
                 case LEADERBOARD:

@@ -2,6 +2,7 @@
 #define ZUMBIS_H
 #include "raylib.h"
 #define NUM_MAXDEZUMBIS 25
+#include <stdbool.h> 
 
 typedef struct {
     Vector2 pos;
@@ -9,14 +10,16 @@ typedef struct {
     float velocidade;
     int vida;
     bool ativo;
-} Zumbi;
+} ZUMBI;
 
 
 void InitZumbis(void);
 
-void AtualizaZumbis(float delta, Texture2D grama);
+bool TemZumbisVivos(void);
 
-void SpawnHorda(Texture2D grama);
+void AtualizaZumbis(float delta, Texture2D grama, int horda[]);
+
+void SpawnHorda(Texture2D grama, int horda);
 
 void DesenhaZumbis(Texture2D zumbi);
 

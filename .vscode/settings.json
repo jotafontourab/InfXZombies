@@ -15,6 +15,9 @@
 		"fechar.h": "c",
 		"sois.h": "c",
 		"game.h": "c",
-		"stdio.h": "c"
+		"stdio.h": "c",
+		"stdbool.h": "c",
+		"zumbis.h": "c",
+		"*.m": "c"
 	}
 }
