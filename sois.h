@@ -9,6 +9,8 @@ typedef struct {
     float tempoVida;
 } Sol;
 
+extern int numSois;
+
 void InitSois(void);
 void AtualizaSois(void);
 void DrawSois(void);

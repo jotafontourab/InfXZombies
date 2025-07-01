@@ -5,7 +5,7 @@
 
 #define MAX_PROJETEIS 100
 
-extern int pontuação; 
+extern int pontuacao;
 
 typedef struct {
     Vector2 posicao;
@@ -14,6 +14,10 @@ typedef struct {
     int dano;
     bool ativo;
 } Projetil;
+
+void InitPlantas(void);
+
+
 
 void CriarProjetil(Vector2 posInicial, int linha, int dano, float velocidade);
 void DesenharProjeteis(Texture2D projetil);

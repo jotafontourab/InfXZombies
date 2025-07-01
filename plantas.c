@@ -3,7 +3,15 @@
 
 Projetil projeteis[MAX_PROJETEIS];
 
-int pontuação = 0; // Variável global para armazenar a pontuação
+int pontuacao = 0; // Variável global para armazenar a pontuação
+
+void InitPlantas(void) {
+    for (int i = 0; i < MAX_PROJETEIS; i++) {
+        projeteis[i].ativo = false;
+    }
+    pontuacao = 0;
+}
+
 
 void CriarProjetil(Vector2 posInicial, int linha, int dano, float velocidade) {
     for (int i = 0; i < MAX_PROJETEIS; i++) {
@@ -47,7 +55,7 @@ void AtualizarProjeteis(float delta, Texture2D zumbi) {
                     
                     if (zumbis[z].vida <= 0) {
                         zumbis[z].ativo = false;
-                        pontuação += 100; // Incrementa a pontuação ao eliminar um zumbi
+                        pontuacao += 100; // Incrementa a pontuação ao eliminar um zumbi
                     }
                     break;
                 }

@@ -35,6 +35,24 @@ int tabuleiro[LINHAS][COLUNAS] = { 0 };
 PlantaSelecionada plantaSelecionada = SELECAO_NENHUMA;
 
 
+void initGame(Texture2D grama, Texture2D botaomenugenerico, int horda[]) { //funcao que reseta todas as variaveis do jogo, para que o jogo possa reiniciar
+    InitPlantas(); 
+    InitSois();
+    InitZumbis();
+    int ordanum = 0; // reseta o numero da horda
+    permissaohordacontinua = 1;
+    
+    
+
+    for (int i = 0; i < LINHAS; i++) {
+        for (int j = 0; j < COLUNAS; j++) {
+            tabuleiro[i][j] = 0;
+        }
+    }
+     SpawnHorda(grama, horda[0], &permissaohordacontinua);
+}
+
+
 void desenhaGame(Texture2D gamebackground,
                  float x,
                  float y,
@@ -53,7 +71,7 @@ void desenhaGame(Texture2D gamebackground,
                  Texture2D projetil) {
 
 int botaoclicado = 0; // variável para controlar o botão clicado, para que a confirmação de clique não fique ativa, para conseguir colocar as plantas no tabuleiro
-int soiscont = 0;
+
 
 AtualizarProjeteis(delta, zumbi);
 
@@ -98,8 +116,8 @@ if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
         botaoclicado = 1;
     }
 }
-               soiscont = SoisColetados(); 
-              DrawText(TextFormat("%d", soiscont), 75, 50, 30, BLACK);
+        
+              DrawText(TextFormat("%d", numSois), 75, 50, 30, BLACK);
 
     if (plantaSelecionada != SELECAO_NENHUMA && IsMouseButtonPressed(MOUSE_LEFT_BUTTON)  && !botaoclicado) {
         int col = (mouse.x - MARGEM_X -30) / grama.width;

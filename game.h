@@ -7,7 +7,9 @@
 #include "raylib.h"
 
 
-extern int permissaohordacontinua; 
+extern int permissaohordacontinua;
+
+void initGame(Texture2D grama, Texture2D botaomenugenerico, int horda[]); // funcao que reseta todas as variaveis do jogo, para que o jogo possa reiniciar
 
 void desenhaGame(Texture2D gamebackground,
                  float x,

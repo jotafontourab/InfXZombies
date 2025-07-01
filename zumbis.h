@@ -14,6 +14,8 @@ typedef struct {
 
 extern ZUMBI zumbis[NUM_MAXDEZUMBIS];
 
+extern int ordanum;
+
 void InitZumbis(void);
 
 bool TemZumbisVivos(void);

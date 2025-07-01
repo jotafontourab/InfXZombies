@@ -7,10 +7,12 @@
 static Sol sois[MAX_SOIS];
 static Texture2D spriteSol;
 static float tempoSois = 0.0f;
-static int contadorSois = 0;
 static Image imagesol;
 
+int numSois = 0;
+
 void InitSois(void) {
+    numSois = 0;
     imagesol = LoadImage("sprites/sun.png");
     spriteSol = LoadTextureFromImage(imagesol);
     spriteSol.width = 25; // Definindo a largura da textura do sol
@@ -45,7 +47,7 @@ void AtualizaSois(void) {
             for (int i = 0; i < MAX_SOIS; i++) {
             if (sois[i].ativo) {
             sois[i].ativo = false;
-            contadorSois+=25;
+            numSois+=25;
         }
     }
 }
@@ -62,10 +64,10 @@ void DrawSois(void) {
 }
 
 int SoisColetados(void) {
-    return contadorSois;
+    return numSois;
 }
 
 void SubtraiSois(int valor) {
-    contadorSois -= valor;
-    if (contadorSois < 0) contadorSois = 0;
+    numSois -= valor;
+    if (numSois < 0) numSois = 0;
 }

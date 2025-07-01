@@ -5,7 +5,7 @@
 #include <stdbool.h> // nao conhecia essa biblioteca, mas tive que inclui-la pq para criar uma funcao booleana (necessaria, pois tenho que saber se
 //ha zombis vivos ainda para poder decidir se a proxima horda vai ser spawnada ou nao) tenho que importala.
 // #define VIDA_ZUMBI 100
-#define VELOCIDADE_ZUMBI 15.0f
+#define VELOCIDADE_ZUMBI 45.0f
 #define HORA_SPAWN_HORDA 15.0f
 #define MARGEM_X 35
 #define MARGEM_Y 95

@@ -13,7 +13,6 @@ typedef struct {
 
 char nomejogador[25]; // nome do jogador
 int pontuacao; // pontuacao do jogador
-
 }JOGADOR;
 
 typedef enum GameScreen { MENU = 0, JOGO, LEADERBOARD, FECHAR } GameScreen;
@@ -161,6 +160,7 @@ SpawnHorda(grama, horda[0], &permissaohordacontinua); // inicializando os zumbis
                 if (btnAction){
               
                 currentScreen = JOGO;
+                initGame(grama, botaomenugenerico, horda);
                 }
             }
        
