@@ -19,8 +19,7 @@ void InitSois(void) {
     spriteSol.height = 25; // Definindo a altura da textura do sol
     for (int i = 0; i < MAX_SOIS; i++) sois[i].ativo = false;
 }
-
-static void gerarSol(void) {
+void gerarSol(void) {
     for (int i = 0; i < MAX_SOIS; i++) {
         if (sois[i].ativo != true) {
             sois[i].posicao = (Vector2){ GetRandomValue(90, 600), GetRandomValue(110, 400) };

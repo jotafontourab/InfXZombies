@@ -12,8 +12,8 @@
 #define COLUNAS 9
 #define LARGURA_QUADRADINHO 72
 #define ALTURA_QUADRADINHO 96
-#define INTERVALO_DISPARO_ERVILHA 10.0f 
-#define INTERVALO_DISPARO_GIRASSOL 13.0f 
+#define INTERVALO_DISPARO_ERVILHA 25.0f 
+#define INTERVALO_DISPARO_GIRASSOL 30.0f 
 #define DANO_ERVILHA 20
 #define DANO_GIRASSOL 15
 #define VELOCIDADE_PROJETIL 15.0f
@@ -174,15 +174,15 @@ if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
             float x = (MARGEM_X -30) + j * grama.width;
             float y = MARGEM_Y + i * grama.height;
             
-            if (tabuleiro[i][j] == 1 || tabuleiro[i][j] == 2) { // Ervilha ou Girassol
-                // Atualiza temporizador
+            if (tabuleiro[i][j] == 1) { 
+                // reseta o tempo de cooldown  entre os tiros
                 tempoDesdeUltimoDisparo[i][j] += delta;
                 
                 // Verifica se pode atirar
                 float intervalo = (tabuleiro[i][j] == 1) ? INTERVALO_DISPARO_ERVILHA : INTERVALO_DISPARO_GIRASSOL;
                 int dano = (tabuleiro[i][j] == 1) ? DANO_ERVILHA : DANO_GIRASSOL;
                 
-                if (tempoDesdeUltimoDisparo[i][j] >= intervalo) {
+                if (tempoDesdeUltimoDisparo[i][j] >= INTERVALO_DISPARO_ERVILHA) {
                     // Verifica se há zumbis à frente
                     bool temZumbi = false;
                     for (int z = 0; z < NUM_MAXDEZUMBIS; z++) {
@@ -194,7 +194,7 @@ if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
                     
                     // Dispara se houver zumbi
                     if (temZumbi) {
-                        CriarProjetil((Vector2){x + 50, y + 20}, i, dano, VELOCIDADE_PROJETIL);
+                        CriarProjetil((Vector2){x + 50, y + 20}, i, DANO_ERVILHA, VELOCIDADE_PROJETIL);
                         tempoDesdeUltimoDisparo[i][j] = 0.0f; // Reseta o temporizador
                     }
                 }

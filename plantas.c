@@ -54,7 +54,7 @@ void AtualizarProjeteis(float delta, Texture2D zumbi) {
                     
                     if (zumbis[z].vida <= 0) {
                         zumbis[z].ativo = false;
-                        pontuacao += 100; // Incrementa a pontuação ao eliminar um zumbi
+                        pontuacao += 100; // incrementa a pontuação ao eliminar um zumbi
                     }
                     break;
                 }
